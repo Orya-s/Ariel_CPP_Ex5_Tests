@@ -18,7 +18,9 @@ TEST_CASE("Creating a BinaryTree tests")
     CHECK_NOTHROW(bt.add_root(2));
     CHECK_EQ(*bt.begin_preorder(), 2);
 
-    
+    BinaryTree<int> b;  // checking =(other) operator
+    bt = BinaryTree<int>();
+
     // double BT
     BinaryTree<double> bt_d;
     double root_d = 2.2;
@@ -43,25 +45,8 @@ TEST_CASE("Creating a BinaryTree tests")
     string new_root = "new root";
     CHECK_NOTHROW(bt_s.add_root(new_root));
     CHECK_EQ(*bt_s.begin_postorder(), new_root);
-
-
-
-    // int temp = root;
-    // for (auto i: arr)  
-    // {
-    //     int rand_side = rand() % 2;
-    //     if (rand_side == 0)
-    //     {
-    //         bt.add_left(temp, i);
-    //     }
-    //     else
-    //     {
-    //         bt.add_right(temp, i);
-    //     }
-    //     cout << "pair - (" << temp << "," << i << ")  side - " << rand_side << endl;
-    //     temp = i;
-    // }
 }
+
 
 TEST_CASE("adding childs before root test")
 {
@@ -81,6 +66,7 @@ TEST_CASE("adding childs before root test")
     CHECK_THROWS(bt_s.add_left("000", "111111"));
     CHECK_THROWS(bt_s.add_right("no root", "son"));
 }
+
 
 TEST_CASE("iteraiting empty / root tree test")
 {
@@ -119,6 +105,8 @@ TEST_CASE("iteraiting empty / root tree test")
     CHECK_EQ(*bt2.begin_inorder(), root);
     CHECK_EQ(*bt2.begin_postorder(), root);
 
+    CHECK_THROWS(bt2.add_right(2,2));
+
     for (auto it = bt2.begin_preorder(); it != bt2.end_preorder(); ++it) 
     {
         CHECK_EQ(*it, root);
@@ -132,6 +120,7 @@ TEST_CASE("iteraiting empty / root tree test")
         CHECK_EQ(*it, root);
     }  
 }
+
 
 TEST_CASE("simple iterating test")
 {
@@ -150,7 +139,18 @@ TEST_CASE("simple iterating test")
     {
         CHECK_EQ(*it, post[idx++]);
     }  
+
+
+    BinaryTree<string> bts;
+    bts.add_root("root").add_left("root", "left son").add_right("root", "right son").add_left("left son", "l l grand");
+    string preorder[4] = {"root", "left son", "l l grand", "right son"};
+    idx = 0;
+    for (auto it = bts.begin_preorder(); it != bts.end_preorder(); ++it) 
+    {
+        CHECK_EQ(*it, preorder[idx++]);
+    }
 }
+
 
 TEST_CASE("iterating tree with random numbers")
 {
